@@ -15,8 +15,12 @@ a `## Planned approach` section, stop and say:
 ## Phase 1 — Final pre-submit check
 
 ```bash
-git log --oneline origin/main..HEAD    # verify commits look right
-git diff origin/main --stat            # verify scope
+# Verify commits are on your feature branch, not main
+git log --oneline upstream/main..HEAD   # commits that will be in the PR
+git diff upstream/main --stat           # total scope
+
+# Push your branch to your fork (origin), not upstream
+git push origin HEAD
 ```
 
 Ask: "Are you happy with the commit history and scope? Is there anything you want to clean up?"

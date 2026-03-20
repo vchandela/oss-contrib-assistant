@@ -65,10 +65,45 @@ After reading CONTRIBUTING.md, ask:
 > "What surprised you about the contribution process for this project?
 > What is different from what you expected?"
 
-## Phase 3 — Development environment setup
+## Phase 3 — Fork and local setup
+
+Ask:
+> "Have you forked this repo already? Do you have a local clone?"
+
+If not, walk through it:
+
+```bash
+# Fork on GitHub and clone your fork, with upstream auto-configured
+gh repo fork {org}/{repo} --clone --remote
+cd {repo}
+
+# Verify both remotes exist
+git remote -v
+# origin   → https://github.com/{you}/{repo}.git   (your fork — you push here)
+# upstream → https://github.com/{org}/{repo}.git   (the real repo — never push here)
+```
+
+Explain the model:
+- Every PR comes from a branch on **your fork** → upstream's `main`
+- Never commit directly to your fork's `main` — keep it as a clean mirror of upstream
+- Always start new work with: `git fetch upstream && git checkout -b {branch} upstream/main`
+- To sync your fork's main: `git checkout main && git merge upstream/main && git push origin main`
+
+Record in `projects/{name}/setup.md`:
+```markdown
+## Fork setup
+- Fork URL: https://github.com/{you}/{repo}
+- Local path: {absolute path on disk}
+- upstream remote: https://github.com/{org}/{repo}
+- Default branch: {main/master/develop}
+```
+
+Also ask: "What is your GitHub username?" — needed later to construct PR URLs and reference your fork.
+
+## Phase 4 — Development environment setup
 
 Read the README and CONTRIBUTING.md for setup instructions. Ask:
-> "Have you set up this project locally before? What step do you think will be hardest?"
+> "Have you built this project locally before? What step do you think will be hardest?"
 
 Walk through setup:
 - Identify the exact commands to build and test
@@ -107,7 +142,7 @@ Date: {YYYY-MM-DD}
 <!-- anything that wasn't in the docs -->
 ```
 
-## Phase 4 — PR archaeology (read before contributing)
+## Phase 5 — PR archaeology (read before contributing)
 
 Fetch the 10 most recently merged PRs using `gh pr list --state merged --limit 10 --repo {org}/{repo}`.
 
@@ -123,7 +158,7 @@ Ask:
 
 Document findings in `projects/{name}/setup.md` under `## PR patterns`.
 
-## Phase 5 — Unknown unknowns checklist
+## Phase 6 — Unknown unknowns checklist
 
 Go through each item and mark it:
 
@@ -145,7 +180,7 @@ Go through each item and mark it:
 - [ ] Maintainer response time expectation (check recent issue activity)
 ```
 
-## Phase 6 — First issue selection
+## Phase 7 — First issue selection
 
 Search for beginner-appropriate issues:
 
@@ -159,7 +194,7 @@ Do NOT suggest picking an issue yet. Ask:
 > "Read through these issues. Which one do you understand best — not which one seems easiest,
 > but which one you can explain back to me in terms of what the code is doing wrong?"
 
-## Phase 7 — Update memory
+## Phase 8 — Update memory
 
 After all phases complete:
 1. Update `memory/landscape.md` — add the project entry

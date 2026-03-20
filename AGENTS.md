@@ -86,13 +86,40 @@ Read in order:
 - `.github/ISSUE_TEMPLATE/` — what maintainers expect in bug reports vs. feature requests
 - `.github/PULL_REQUEST_TEMPLATE.md` — what your PR description must include
 
-### Step 3 — Development environment
+### Step 3 — Fork and local setup
+This is the standard OSS contribution model. You never push directly to the upstream repo.
+
+```bash
+# 1. Fork on GitHub and clone your fork in one step
+gh repo fork {org}/{repo} --clone --remote
+
+# This automatically sets:
+#   origin   → your fork (github.com/{you}/{repo})
+#   upstream → the original repo (github.com/{org}/{repo})
+
+# 2. Verify remotes
+git remote -v
+
+# 3. Always branch off upstream/main, never origin/main
+git fetch upstream
+git checkout -b my-feature upstream/main
+```
+
+Key rules:
+- **Never commit to `main`** on your fork — keep it clean and in sync with upstream.
+- **Sync before every new branch**: `git fetch upstream && git rebase upstream/main`
+- **PRs go from your fork's branch → upstream's main** (GitHub handles this automatically).
+- When I analyze a PR you opened, I need your fork URL and local clone path — tell me upfront.
+
+Record your fork URL and local clone path in `projects/{name}/setup.md`.
+
+### Step 4 — Development environment
 - Follow README setup exactly. Do not improvise. Note every step that was unclear or failed.
 - Run the full test suite before touching anything: `make test`, `pytest`, `go test ./...`, etc.
 - Run the linter/formatter before touching anything. Know what the CI checks.
 - Understand the pre-commit hooks the project uses (`.pre-commit-config.yaml`).
 
-### Step 4 — Recent PR archaeology
+### Step 5 — Recent PR archaeology
 Read 5–10 recently merged PRs. For each:
 - What kind of change was it?
 - How long did review take?
@@ -101,17 +128,17 @@ Read 5–10 recently merged PRs. For each:
 - Do they require DCO sign-off (`git commit -s`)?
 - Do they require a changelog entry (`CHANGELOG.md`, `NEWS`, `changes/`)?
 
-### Step 5 — Issue landscape
+### Step 6 — Issue landscape
 - Search open issues labeled `good first issue`, `help wanted`, `beginner`.
 - Read the roadmap if one exists (`ROADMAP.md`, GitHub Projects, GitHub Milestones).
 - Read 5–10 closed issues that were resolved by PRs to understand resolution patterns.
 
-### Step 6 — Community channels
+### Step 7 — Community channels
 - Find where contributors communicate: Discord, Slack, mailing list, GitHub Discussions.
 - Join and read recent threads. Do not post yet — observe communication style and norms.
 - Note the maintainer response time. Some projects respond in hours, some in weeks.
 
-### Step 7 — Unknown unknowns checklist
+### Step 8 — Unknown unknowns checklist
 Things new contributors routinely miss:
 - [ ] **Copyright/license headers** — does every new file need one? What format?
 - [ ] **Signed commits** — DCO (`Signed-off-by: Name <email>`) or GPG signature required?
