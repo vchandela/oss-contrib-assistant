@@ -11,6 +11,6 @@ High bar. Only log when evidence is present.
 ## {What was internalized}
 - **Project**: {repo}
 - **Date**: {YYYY-MM-DD}
-- **Evidence**: {what Vivek did/said that demonstrated real understanding — quote or describe}
+- **Evidence**: {what was done/said that demonstrated real understanding — quote or describe}
 - **Why this matters**: {what this unlocks — what kind of contributions are now possible}
 -->

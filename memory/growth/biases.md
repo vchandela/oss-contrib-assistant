@@ -1,7 +1,7 @@
 # Contributor Biases and Shortcomings
 
 Recurring reasoning errors and shortcut patterns observed during OSS contribution sessions.
-Updated by the mentor — not by Vivek. These are observations, not judgements.
+Updated by the mentor — not by the contributor. These are observations, not judgements.
 
 The goal: once a pattern is named and dated, it can be caught earlier in future sessions.
 
