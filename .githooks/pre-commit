@@ -1,0 +1,83 @@
+#!/bin/bash
+# Pre-commit hook: when contribution notes are staged, require daily log and
+# landscape update to be staged too. Validates contribution note structure.
+# Install: bash scripts/install-hooks.sh
+
+CONTRIB_FILES=$(git diff --cached --name-only | grep "projects/.*/contributions/.*\.md")
+
+if [ -z "$CONTRIB_FILES" ]; then
+  exit 0
+fi
+
+FAILED=0
+
+# ── 1. Contribution note format ───────────────────────────────────────────────
+for f in $CONTRIB_FILES; do
+  if [ ! -f "$f" ]; then continue; fi
+
+  MISSING=""
+  grep -q "## Why does this issue exist"   "$f" || MISSING="$MISSING 'Why does this issue exist?'"
+  grep -q "## Blast radius"                "$f" || MISSING="$MISSING 'Blast radius'"
+  grep -q "## What the project wants"      "$f" || MISSING="$MISSING 'What the project wants'"
+
+  if [ -n "$MISSING" ]; then
+    echo "❌ Contribution note missing sections: $f"
+    echo "   Missing:$MISSING"
+    echo "   You must answer the three questions before committing a contribution note."
+    FAILED=1
+  fi
+done
+
+# ── 2. landscape.md must be staged ───────────────────────────────────────────
+LANDSCAPE_STAGED=$(git diff --cached --name-only | grep "^memory/landscape\.md$")
+if [ -z "$LANDSCAPE_STAGED" ]; then
+  echo "❌ memory/landscape.md not staged."
+  echo "   Every contribution note commit must update the landscape."
+  echo "   Mark the project's status, last-active date, and any key files read."
+  echo "   Then: git add memory/landscape.md"
+  FAILED=1
+fi
+
+# ── 3. Today's daily log must be staged ──────────────────────────────────────
+TODAY=$(date +%Y-%m-%d)
+DAILY_LOG="memory/daily/$TODAY.md"
+DAILY_STAGED=$(git diff --cached --name-only | grep "^${DAILY_LOG}$")
+if [ -z "$DAILY_STAGED" ]; then
+  echo "❌ Daily log not staged: $DAILY_LOG"
+  echo "   Log the session (what we explored, key insight, still confused about, next session)."
+  echo "   Then: git add $DAILY_LOG"
+  FAILED=1
+fi
+
+# ── 4. Growth files — warn only ───────────────────────────────────────────────
+GROWTH_STAGED=$(git diff --cached --name-only | grep "^memory/growth/")
+if [ -z "$GROWTH_STAGED" ]; then
+  echo "⚠️  No memory/growth/ files staged."
+  echo "   Did this session reveal a shortcut you took? A pattern you keep repeating?"
+  echo "   Did something finally click? Did a question about the codebase open up?"
+  echo "   If yes, update the relevant file:"
+  echo "   → memory/growth/biases.md        (shortcut or reasoning error observed)"
+  echo "   → memory/growth/open-questions.md (still confused about something)"
+  echo "   → memory/growth/progress.md      (genuine internalization — high bar)"
+  echo "   (Not blocking — continue if genuinely nothing to add.)"
+fi
+
+# ── 5. Project overview must exist ────────────────────────────────────────────
+for f in $CONTRIB_FILES; do
+  PROJECT=$(echo "$f" | sed 's|projects/\([^/]*\)/.*|\1|')
+  OVERVIEW="projects/$PROJECT/overview.md"
+  if [ ! -f "$OVERVIEW" ]; then
+    echo "❌ Missing project overview: $OVERVIEW"
+    echo "   Run /onboard-project for '$PROJECT' before committing contribution notes."
+    FAILED=1
+  fi
+done
+
+if [ $FAILED -eq 1 ]; then
+  echo ""
+  echo "Fix the above, then re-stage and commit."
+  exit 1
+fi
+
+echo "✅ Contribution notes OK — three questions, landscape, and daily log all present."
+exit 0

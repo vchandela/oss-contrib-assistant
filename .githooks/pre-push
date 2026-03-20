@@ -1,0 +1,66 @@
+#!/bin/bash
+# Pre-push hook: blocks push if contribution notes were committed today but
+# growth/ files or the daily log weren't updated during the session.
+# Install: bash scripts/install-hooks.sh
+
+TODAY=$(date +%Y-%m-%d)
+DAILY_LOG="memory/daily/$TODAY.md"
+
+# Only run if contribution notes were committed today
+CONTRIB_COMMITS_TODAY=$(git log --since="$TODAY 00:00:00" --name-only --pretty="" 2>/dev/null | grep "projects/.*/contributions/.*\.md")
+
+if [ -z "$CONTRIB_COMMITS_TODAY" ]; then
+  exit 0
+fi
+
+FAILED=0
+
+# ── 1. Daily log must exist ───────────────────────────────────────────────────
+if [ ! -f "$DAILY_LOG" ]; then
+  echo "❌ No daily log for today: $DAILY_LOG"
+  echo "   You committed contribution notes today but haven't written the session log."
+  echo "   Minimum: what we explored, key insight, still confused about, next session."
+  FAILED=1
+fi
+
+# ── 2. At least one growth/ file must have been touched today ────────────────
+GROWTH_FILES=(
+  "memory/growth/open-questions.md"
+  "memory/growth/biases.md"
+  "memory/growth/progress.md"
+)
+
+GROWTH_TOUCHED=0
+for f in "${GROWTH_FILES[@]}"; do
+  if [ -f "$f" ]; then
+    MODIFIED=$(git log --since="$TODAY 00:00:00" --name-only --pretty="" 2>/dev/null | grep "^${f}$")
+    if [ -n "$MODIFIED" ]; then
+      GROWTH_TOUCHED=1
+      break
+    fi
+  fi
+done
+
+if [ $GROWTH_TOUCHED -eq 0 ]; then
+  echo "❌ No growth/ files updated today despite contribution note commits."
+  echo ""
+  echo "   At least one of these should be updated per contribution session:"
+  echo "   → memory/growth/biases.md          (shortcut taken? pattern repeated?)"
+  echo "   → memory/growth/open-questions.md  (codebase still confusing somewhere?)"
+  echo "   → memory/growth/progress.md        (genuine internalization — high bar)"
+  echo ""
+  echo "   Be honest. Did you read the code or just apply a pattern from memory?"
+  echo "   Did you understand why the fix works or just that it works?"
+  echo ""
+  echo "   If you are certain nothing applies, push with: git push --no-verify"
+  FAILED=1
+fi
+
+if [ $FAILED -eq 1 ]; then
+  echo ""
+  echo "Update the files above, commit them, then push."
+  exit 1
+fi
+
+echo "✅ Memory files OK — daily log and growth files present."
+exit 0

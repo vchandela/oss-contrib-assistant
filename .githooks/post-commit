@@ -1,0 +1,30 @@
+#!/bin/bash
+# Post-commit hook: after committing contribution notes, remind about growth files.
+# Not blocking — a nudge only.
+# Install: bash scripts/install-hooks.sh
+
+CONTRIB_FILES=$(git diff HEAD~1 --name-only 2>/dev/null | grep "projects/.*/contributions/.*\.md")
+
+if [ -z "$CONTRIB_FILES" ]; then
+  exit 0
+fi
+
+GROWTH_UPDATED=$(git diff HEAD~1 --name-only 2>/dev/null | grep "^memory/growth/")
+
+if [ -z "$GROWTH_UPDATED" ]; then
+  echo ""
+  echo "🔧 Contribution note committed. Growth files not touched this commit."
+  echo ""
+  echo "   Did you take a shortcut during this session? Read the fix before understanding why?"
+  echo "   Did something about the codebase still not make sense?"
+  echo "   Did you genuinely internalize something you could explain to a maintainer?"
+  echo ""
+  echo "   → memory/growth/biases.md        (shortcut / recurring pattern)"
+  echo "   → memory/growth/open-questions.md (genuine confusion — not just missing info)"
+  echo "   → memory/growth/progress.md      (real internalization — high bar)"
+  echo ""
+  echo "   If none apply honestly, no action needed."
+  echo ""
+fi
+
+exit 0
