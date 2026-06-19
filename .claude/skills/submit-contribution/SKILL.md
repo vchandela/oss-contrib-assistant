@@ -1,6 +1,6 @@
 ---
 name: submit-contribution
-description: Open the pull request and update all memory files. Use only after review-draft-pr passes. Handles PR creation, contribution note update, daily log, and growth file prompts.
+description: Open the pull request and update the project's notes. Use only after review-draft-pr passes. Handles PR creation, contribution note update, and the project journal.
 allowed-tools: Bash(gh:*),Bash(git:*),Read,Write
 ---
 
@@ -66,12 +66,12 @@ Add to the contribution note:
 <!-- fill in as maintainer responds -->
 ```
 
-## Phase 4 — Memory update
+## Phase 4 — Journal update
 
-1. Update `memory/landscape.md` — increment contribution count, update last-active date
-2. Update `memory/daily/{YYYY-MM-DD}.md` — log the submission
+Prepend a dated entry to `memory/{name}/journal.md` logging the submission: the PR URL,
+what shipped, and the new cliff-hanger (what to watch for in review, or the next mystery).
 
-## Phase 5 — Growth reflection
+## Phase 5 — Reflection
 
 Ask:
 > "Now that the PR is open — what did you learn about this codebase that you didn't know
@@ -81,9 +81,8 @@ Then ask:
 > "Did you catch yourself taking any shortcuts during this contribution?
 > Reading a fix without understanding why? Guessing at a blast radius instead of searching?"
 
-Based on the answers:
-- If shortcut detected → add to `memory/growth/biases.md`
-- If genuine learning → add to `memory/growth/open-questions.md` or `progress.md` (high bar)
+Capture anything durable — a genuine insight, or a shortcut to watch for — in
+`memory/{name}/map.md` or the journal entry. Keep it honest and specific.
 
 End with: "PR submitted. Now wait for maintainer feedback — do not ping the maintainer for
 at least one week. Use the time to start exploring another issue in /explore-issue."

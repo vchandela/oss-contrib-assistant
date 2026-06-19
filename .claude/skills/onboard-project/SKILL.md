@@ -26,7 +26,7 @@ Ask the user:
 Wait for their answer. Then present the DeepWiki summary and ask:
 > "How close was your mental model? What surprised you?"
 
-Record the architecture in `projects/{name}/overview.md`:
+Record the architecture in `memory/{name}/overview.md`:
 
 ```markdown
 # {Project name} — Architecture Overview
@@ -89,7 +89,7 @@ Explain the model:
 - Always start new work with: `git fetch upstream && git checkout -b {branch} upstream/main`
 - To sync your fork's main: `git checkout main && git merge upstream/main && git push origin main`
 
-Record in `projects/{name}/setup.md`:
+Record in `memory/{name}/setup.md`:
 ```markdown
 ## Fork setup
 - Fork URL: https://github.com/{you}/{repo}
@@ -112,7 +112,7 @@ Walk through setup:
 - Identify how to run a specific test file or test case (important for iteration speed)
 - Identify environment variables or secrets needed
 
-Record in `projects/{name}/setup.md`:
+Record in `memory/{name}/setup.md`:
 ```markdown
 # {Project name} — Setup Notes
 Date: {YYYY-MM-DD}
@@ -156,7 +156,7 @@ Ask:
 > "Based on these PRs, what do you think maintainers here care most about?
 > What would make a PR get rejected?"
 
-Document findings in `projects/{name}/setup.md` under `## PR patterns`.
+Document findings in `memory/{name}/setup.md` under `## PR patterns`.
 
 ## Phase 6 — Unknown unknowns checklist
 
@@ -194,12 +194,10 @@ Do NOT suggest picking an issue yet. Ask:
 > "Read through these issues. Which one do you understand best — not which one seems easiest,
 > but which one you can explain back to me in terms of what the code is doing wrong?"
 
-## Phase 8 — Update memory
+## Phase 8 — Seed the project journal
 
-After all phases complete:
-1. Update `memory/landscape.md` — add the project entry
-2. Update `memory/MEMORY.md` — add a link to the project overview under "Active projects"
-3. Write `memory/daily/{YYYY-MM-DD}.md` session entry
+After all phases complete, create `memory/{name}/journal.md` with the first entry:
+- Date, what onboarding covered, and the cliff-hanger (the first mystery worth chasing).
 
 Say: "Onboarding complete. Overview and setup notes saved. Ready to explore issues — use
 /explore-issue when you've picked one."

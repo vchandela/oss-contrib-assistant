@@ -66,6 +66,6 @@ After finding the tests:
 
 After reading session:
 1. Update the contribution note with code location and what was understood
-2. Update `memory/daily/{YYYY-MM-DD}.md`
-3. Ask: "What are you still confused about?" → add to `memory/growth/open-questions.md` if real
-4. Ask: "Did anything reveal a pattern in how you read code?" → biases if relevant
+2. Prepend a session entry to `memory/{name}/journal.md` (cliff-hanger on top)
+3. Ask: "What are you still confused about?" → note unresolved questions in `memory/{name}/map.md`
+4. Promote anything genuinely understood (with evidence) into `memory/{name}/map.md`

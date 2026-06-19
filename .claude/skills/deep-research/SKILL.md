@@ -72,8 +72,8 @@ State explicitly:
 
 Output:
 1. Direct answer to the scoped question
-2. Update `projects/{name}/overview.md` with architectural findings
-3. Update `projects/{name}/gaps.md` with remaining open questions
+2. Update `memory/{name}/overview.md` with architectural findings
+3. Record remaining open questions in `memory/{name}/map.md` (mark them unresolved)
 4. Recommended next action
 
 ## Teaching note

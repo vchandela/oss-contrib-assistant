@@ -9,7 +9,7 @@ allowed-tools: Read,Glob,Grep,WebFetch,Bash(gh:*)
 ## Prerequisite check
 
 Before starting, verify:
-1. The contribution note for this issue exists at `projects/{name}/contributions/{issue-slug}.md`
+1. The contribution note for this issue exists at `memory/{name}/contributions/{issue-slug}.md`
 2. The three questions section is filled in
 3. Code location is identified
 

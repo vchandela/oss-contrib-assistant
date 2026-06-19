@@ -68,7 +68,7 @@ When the right file is found:
 
 ## Phase 4 — Write the contribution note
 
-Create `projects/{name}/contributions/{issue-number}-{slug}.md`:
+Create `memory/{name}/contributions/{issue-number}-{slug}.md`:
 
 ```markdown
 # Issue #{number}: {title}

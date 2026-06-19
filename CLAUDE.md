@@ -60,7 +60,7 @@ a time.
 **Quest states:**
 - 🔍 **Active** — the mystery you are chasing right now. Only ever one.
 - 🪤 **Blocked** — needs a prerequisite you do not have yet. Park it; find the prereq first.
-- ✅ **Resolved** — you understood it. Write it into `.agent/map.md` with evidence.
+- ✅ **Resolved** — you understood it. Write it into `memory/{name}/map.md` with evidence.
 - 💤 **Parked** — discovered, not yet chased. Tracked in the journal.
 
 If you are chasing two things at once, you are not really chasing either.
@@ -144,11 +144,14 @@ usually obvious. Unblock Mode removes friction; it does not remove the work.
 
 ### The Journal
 
-At the end of every session, we write `.agent/daily/YYYY-MM-DD.md`.
+At the end of every session, we prepend a dated entry to `memory/{name}/journal.md`
+(the project's running log — newest entry on top).
 
 This is your save state — specifically the cliff-hanger that pulls you back next time.
 
 ```markdown
+## {YYYY-MM-DD}
+
 ## Active Quest
 [One sentence, question form. The mystery you are mid-chase.]
 
@@ -185,7 +188,7 @@ One creates pull. The other is a log entry.
 
 Every session begins the same way.
 
-1. I read `.agent/daily/[last session].md`
+1. I read the top entry of `memory/{name}/journal.md`
 2. I state the cliff-hanger in one sentence
 3. I ask: *"What do you remember about where you were?"*
 4. You retrieve — do not look at notes yet, just say what you remember
@@ -271,7 +274,7 @@ That is not trust. Trust is being tagged.
 Run this exactly once. This is the foundation of everything that follows.
 
 **Onboarding is timeboxed.** After 2–3 focused sessions, we must produce:
-1. A rough architecture map in `.agent/overview.md`
+1. A rough architecture map in `memory/{name}/overview.md`
 2. A shortlist of 3 candidate issues
 3. A recommended first issue with rationale
 4. A plan for one bounded contribution
@@ -288,7 +291,7 @@ Go to `deepwiki.com/{org}/{repo}`. Read:
 - Entry points
 - Key abstractions: interfaces, base classes, protocols
 
-Write your understanding to `.agent/overview.md` in your own words. If you cannot write
+Write your understanding to `memory/{name}/overview.md` in your own words. If you cannot write
 it in your own words, you have read it but not understood it. The writing is the test.
 
 **DeepWiki is a map, not the territory.** Treat it as a starting hypothesis. Every
@@ -304,7 +307,7 @@ Read in this order:
 - `.github/ISSUE_TEMPLATE/`
 - `.github/PULL_REQUEST_TEMPLATE.md`
 
-Note anything surprising in `.agent/setup.md`.
+Note anything surprising in `memory/{name}/setup.md`.
 
 ### Step 3 — Fork and local setup
 
@@ -327,7 +330,7 @@ Rules:
 - Sync before every new branch: `git fetch upstream && git rebase upstream/main`
 - PRs go from your fork's feature branch → upstream's main
 
-Record fork URL and local clone path in `.agent/setup.md`.
+Record fork URL and local clone path in `memory/{name}/setup.md`.
 
 ### Step 4 — Dev environment
 
@@ -349,7 +352,7 @@ For each, extract:
 - DCO sign-off required? (`Signed-off-by: Name <email>`)
 - Changelog entry required?
 
-Write the patterns in `.agent/setup.md`. These are the maintainer's taste, made legible.
+Write the patterns in `memory/{name}/setup.md`. These are the maintainer's taste, made legible.
 Your PRs will be measured against them whether you read them or not.
 
 ### Step 6 — Issue landscape
@@ -378,28 +381,26 @@ Your PRs will be measured against them whether you read them or not.
 
 ## Agent Workspace
 
-Your private notes live in `.agent/`. This directory is excluded from git locally and
-must never appear in a PR or commit.
-
-```bash
-# One-time setup after cloning
-mkdir -p .agent/daily
-grep -qxF ".agent/" .git/info/exclude || printf "\n.agent/\n" >> .git/info/exclude
-```
-
-Use `.git/info/exclude`, not `.gitignore`. You should not modify the project's
-`.gitignore` to hide your private notes.
+Your notes live in this mentor repo's `memory/` directory — **committed and versioned**,
+never inside the cloned upstream project. The clone under `projects/{name}/` is gitignored
+here and stays a clean mirror of upstream, so notes can never leak into a PR.
 
 ```
-.agent/
-  daily/          ← session journals. Read at the start of every session.
-  overview.md     ← architecture map. Written during onboarding, updated as you go.
-  setup.md        ← fork URL, env notes, PR archaeology findings, community patterns.
-  map.md          ← evolving codebase understanding with evidence per concept.
-  quest-log.md    ← completed quests, what you learned, evidence that confirmed it.
+memory/
+  {name}/                    ← per-project notes, mirrors the clone at projects/{name}/.
+    overview.md              ← architecture map. Written during onboarding, updated as you go.
+    setup.md                 ← fork URL, env notes, PR archaeology findings, community patterns.
+    map.md                   ← evolving codebase understanding with evidence per concept.
+    journal.md               ← running session log, newest entry on top. The cliff-hanger.
+    quest-log.md             ← completed quests, what you learned, evidence that confirmed it.
+    contributions/{slug}.md  ← the three questions + plan + PR link, one file per issue.
 ```
 
-**`.agent/map.md` vs `daily/`** — daily notes are ephemeral: the cliff-hanger for next
+Everything lives under `memory/{name}/` — one folder per project, mirroring its clone at
+`projects/{name}/`. There is no cross-project index or enforcement scaffolding; the notes
+are the product.
+
+**`map.md` vs `journal.md`** — the journal is ephemeral: the cliff-hanger for next
 session. `map.md` is permanent: the growing record of what you genuinely understand,
 with evidence. Update it whenever a quest moves from 🔍 to ✅. A concept without
 evidence in `map.md` is not yet in the map.
@@ -415,4 +416,4 @@ evidence in `map.md` is not yet in the map.
 **Plan Contribution** — check against first PR rubric; design before writing  
 **Review Draft PR** — check against maintainer taste and evidence before submitting  
 **Update Journal** — write the cliff-hanger and level-ups before closing  
-**Update Map** — record a resolved quest into `.agent/map.md` with evidence
+**Update Map** — record a resolved quest into `memory/{name}/map.md` with evidence
