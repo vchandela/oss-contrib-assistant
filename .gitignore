@@ -1,1 +1,8 @@
 .DS_Store
+
+# Cloned upstream OSS project working trees live under projects/<name>/.
+# These are the actual source repos we contribute to — never track them in the
+# mentor repo. The mentor's own notes for a project live in projects/<name>/.agent/
+# (also private) or are kept in memory/. Keep projects/.gitkeep tracked.
+projects/*
+!projects/.gitkeep
